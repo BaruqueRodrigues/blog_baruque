@@ -1,0 +1,148 @@
+---
+title: "Rodando Multiplos Modelos - Tutorial"
+author: "Baruque Rodrigues"
+date: "2024-06-16"
+categories: [tutorial, code, model]
+image: "image.jpg"
+---
+
+## 
+
+### Rodando Multiplos Modelos
+
+Um processo muito comum na prática de análise de dados é encontrar um modelo que melhor resolva o seu problema, onde temos uma relação que queremos entender, por exemplo o número de funcionários de um Posto de Saúde da Família afeta a mortalidade de uma faixa etária dos municípios. O processo as vezes acaba sendo a construção de multiplos modelos, e a verificação um a um dos coeficientes. Meu objetivo aqui é apresentar uma forma de fazer com que esse processo repetitivo e manual possa ser acelerado, de maneira que o tempo do analista possa ser concentrado no que realmente importa, na compreensão do modelo.
+
+#### DRY - Don't Repeat Yourself
+
+Para aqueles que já foram meus alunos, ou trabalharam comigo sabem que esse é o um acronimo que eu sempre repito, afinal o O conceito DRY (Don't Repeat Yourself) é um princípio fundamental na programação, pois enfatiza a redução da redundância.
+
+Em essência, DRY sugere que qualquer pedaço de código deve ter uma única e clara chamada. Em vez de duplicar código, o princípio DRY incentiva a reutilização de componentes existentes, melhorando a manutenção e a legibilidade do código.
+
+Trocando em míudos, tente programar fazendo com que cada chunk de código não seja repetida.
+
+#### Pré requisitos
+
+Esse tutorial vai assumir que você já entenda os conceitos de pivoteamento e de pipeamento de funções, caso você não domine esses conteúdos, recomendo que você visite o r4ds.
+
+#### Botando as mãos na massa
+
+Vamos utilizar dados de painel do DATASUS, armazenados em um arquivo RDS. Nosso objetivo é:
+
+Calcular um modelo de regressão para cada uma das taxas de mortalidade, onde cada taxa será a nossa variável dependente (VD).
+
+```{r, warning=FALSE}
+library(tidyverse)
+
+dados_painel <- rio::import("dados/dados_painel.rds")
+
+glimpse(dados_painel)
+```
+
+Observe aqui que temos variáveis que indicam taxas de mortalidade para diferentes grupos etários, já que a taxa de mortalidade é nossa variável dependente uma das soluções seria executar um modelo para cada uma delas.
+
+O problema dessa abordagem é que o número de modelos escalaria muito rápido. Se temos 5 taxas de mortalidade serão 5 modelos, se adicionamos 1 variável de controle a cada uma delas, seriam 10 modelos.
+
+```{r}
+plm::plm(tx_mort_menor_1 ~ pessoas_psf,
+         data = dados_painel,
+         model = "within",
+         index = c("ano", "municipio")) %>% 
+  summary()
+
+```
+
+Já uma outra solução é utilizando tópicos de programação funcional. Primeiro nós iremos mudar o formato dos dados, de maneira que existam 5 variáveis, `pessoas_psf`, que é nossa Variável Independente, `nomes_mortalidade` que contém os nomes das nossas variáveis dependentes e `values_mortalidade` que contém os valores dessas variáveis, e as variáveis `municipio`, e `ano`
+
+```{r}
+dados_painel %>% 
+  select(contains("tx_mor"), pessoas_psf, municipio, ano) %>%
+  # Organizando os dados em formato longo, empilhando as variáveis de mortalidade
+  pivot_longer(
+    cols = c(tx_mort_menor_1:tx_mort_todos),
+    names_to = "nomes_mortalidade",
+    values_to = "values_mortalidade"
+  ) 
+```
+
+Agora nós iremos transformar nossos dados em nested_data. Onde iremos criar um subconjunto de dados para cada uma das taxas de mortalidade. Observe que a coluna data contém um dataset com 2 colunas e 81 mil linhas, nesse dataset está contida a variável `pessoas_psf` e a variável `values_mortalidade` que contém o o número das taxas de mortalidade por faixa
+
+```{r}
+
+dados_painel %>% 
+  # Organizando os dados em formato longo, empilhando as variáveis de mortalidade
+  pivot_longer(
+    cols = c(tx_mort_menor_1:tx_mort_todos),
+    names_to = "nomes_mortalidade",
+    values_to = "values_mortalidade"
+  ) %>% 
+  nest(data = -nomes_mortalidade) 
+```
+
+Agora podemos executar o nosso modelo, para tal iremos criar uma coluna no dataset chamada `modelo_plm`, que conterá um modelo para cada uma das nossas variáveis.
+
+```{r}
+dados_painel %>% 
+  select(contains("tx_mor"), pessoas_psf, ano, municipio) %>%
+  # Organizando os dados em formato longo, empilhando as variáveis de mortalidade
+  pivot_longer(
+    cols = c(tx_mort_menor_1:tx_mort_todos),
+    names_to = "nomes_mortalidade",
+    values_to = "values_mortalidade"
+  ) %>% 
+  nest(data = -nomes_mortalidade) %>% 
+   mutate(
+    # Executando o modelo para cada variável
+    modelo_plm = map(data, ~plm::plm(values_mortalidade ~ pessoas_psf,
+                                      data = .,
+                                      model = "within",
+                                      index = c("ano", "municipio"))),
+    # Transformando o modelo em um formato tabular
+    modelo_plm = map(modelo_plm, broom::tidy)
+  )
+```
+
+Agora só precisamos remover a coluna data, que não tem nenhum valor analítico, e desenlistar a variável `modelo_plm` para checarmos os modelo.
+
+```{r}
+multiplos_modelos <- dados_painel %>% 
+  select(contains("tx_mor"), pessoas_psf, ano, municipio) %>%
+  # Organizando os dados em formato longo, empilhando as variáveis de mortalidade
+  pivot_longer(
+    cols = c(tx_mort_menor_1:tx_mort_todos),
+    names_to = "nomes_mortalidade",
+    values_to = "values_mortalidade"
+  ) %>% 
+  nest(data = -nomes_mortalidade) %>% 
+   mutate(
+    # Executando o modelo para cada variável
+    modelo_plm = map(data, ~plm::plm(values_mortalidade ~ pessoas_psf,
+                                      data = .,
+                                      model = "within",
+                                      index = c("ano", "municipio"))),
+    # Transformando o modelo em um formato tabular
+    modelo_plm = map(modelo_plm, broom::tidy)
+  ) %>% 
+  select(-data) %>% 
+  unnest_wider(modelo_plm)
+
+multiplos_modelos
+```
+
+Uma das principais vantagens é que eu consigo verificar os Beta estimados dos multiplos modelos em linha, entendendo em quantas unidades ele afeta a minha variável dependente e se esse efeito é igual a zero.
+
+Essa abordagem também permite facilmente a construção de visualizações gráficas
+
+```{r, warning = FALSE}
+multiplos_modelos %>% 
+  ggplot(
+    aes(x = estimate, y = nomes_mortalidade)
+  )+
+  geom_point()+
+  geom_linerange(
+    aes(xmin = estimate-std.error,
+        xmax = estimate+std.error)
+  )+
+  labs(title = "Visualização de Multiplos Modelos")+
+  hrbrthemes::theme_ipsum()
+
+```

@@ -1,0 +1,12 @@
+---
+title: "Bem Vindos"
+author: "Baruque Rodrigues"
+date: "2024-06-13"
+categories: [news]
+---
+
+Fala, galera. Tudo certinho?
+
+![](thumbnail.jpg)
+
+Esse é meu primeiro post aqui no blog, basicamente pra fazer o lançamento dele, todavia não vou gastar energia nele, quem sabe um dia eu volte aqui e refaça esse post.

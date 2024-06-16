@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Baruque Rodrigues">
+<meta name="dcterms.date" content="2024-06-16">
+
+<title>blog_baruque - Por que Tamanho Amostral Importa</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">blog_baruque</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">Quem sou eu</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Por que Tamanho Amostral Importa</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">news</div>
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">analysis</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Baruque Rodrigues </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 16, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="introdução-ao-poder-estatístico" class="level3">
+<h3 class="anchored" data-anchor-id="introdução-ao-poder-estatístico"><strong>1. Introdução ao Poder Estatístico</strong></h3>
+<p>Afinal o que é Poder Estatístico? é a probabilidade de que o teste corretamente rejeite a hipótese nula quando ela é falsa, ou seja é a capacidade do teste de detectar um efeito real, se houver um. E pro que o poder estatístico serve? Para medirmos a eficácia com que um estudo pode fornecer respostas claras e confiáveis, evitando conclusões errôneas sobre os dados analisados.</p>
+<section id="definindo-poder-estatístico" class="level4">
+<h4 class="anchored" data-anchor-id="definindo-poder-estatístico">Definindo Poder Estatístico</h4>
+<p>Antes de definirmos o formalmente o que ele é precisamos entender 2 conceitos chave, Erro do tipo I e Erro do tipo II.</p>
+<ul>
+<li><p><strong>Erro Tipo I (α)</strong>: É o chamado falso positivo, quando detectamos um efeito quando ele não existe. O Erro do Tipo I é cometido quando a nossa hipótese nula é incorretamente rejeitada, apesar de ser verdadeira.</p>
+<p>O nível de significância do teste é denotado por α, sendo a probabilidade de cometer um erro do Tipo I. Tipicamente, os valores de α são escolhidos como (p-valor de) 0.05 ou 0.01, indicando um limite de tolerância de 5% ou 1% para rejeitar incorretamente a hipótese nula.</p></li>
+<li><p><strong>Erro Tipo II (β)</strong>: É conhecido como falso negativo, quando não encontramos o efeito apesar dele existir. Este erro acontece quando a hipótese nula deveria ser rejeitada, ou seja o efeito existe, mas não é detectado. O valor de β é afetado por vários fatores, incluindo o tamanho do efeito e o tamanho da amostra. Reduzir β (Erro do Tipo II) aumenta o poder do teste.</p></li>
+</ul>
+<p>Uma forma de exemplificarmos quando podemos cometer o Erro do Tipo I e o Erro do Tipo II é imaginando o teste de covid. Digamos que você trabalha em uma repartição pública, onde o ar condicionado é constante, há acúmulo de mofo, as janelas nunca são abertas, e trabalha a menos de 1 metro dos seus colegas de trabalho. Na nossa situação hipotética, 3 membros do seu time estão em casa, pois estão com COVID. Você precisa fazer o teste, já que pode tanto contaminar outras pessoas, como também estar doente, vai para uma farmácia, compra o teste e está aguardando o resultado.</p>
+<ul>
+<li><p>Se você não tiver COVID, o <strong>Erro do Tipo I</strong> pode acontecer, já que pode indicar falsamente que você está infectado.</p></li>
+<li><p>Se você tiver COVID, o <strong>Erro do Tipo II</strong> pode acontecer, onde o teste indica de maneira incorreta que você não está infectado.</p></li>
+</ul>
+<p>Agora que já entendemos o que é o Erro do Tipo I <strong>(α)</strong> e o Erro do Tipo II <strong>(β),</strong> podemos definir formalmente o que é Poder Estatístico.</p>
+<p><span class="math display">\[ Poder Estatístico = 1 - \beta \]</span></p>
+<p>O poder estatístico é definido como 1 menos a probabilidade de cometer um erro do Tipo II (β).</p>
+</section>
+</section>
+<section id="componentes-do-poder-estatístico" class="level3">
+<h3 class="anchored" data-anchor-id="componentes-do-poder-estatístico"><strong>2. Componentes do Poder Estatístico</strong></h3>
+<p>Para verificarmos a capacidade de um teste detectar um efeito quando ele existe, ou seja medir o poder estatístico, precisamos ter em mente alguns componentes, como o <strong>tamanho da amostra</strong> <strong>(n)</strong>, o <strong>tamanho do efeito</strong>, o <strong>nível de significância (α)</strong> e a <strong>variabilidade dos dados</strong>, mas antes vamos definir o que são cada um desses elementos.</p>
+<ul>
+<li><p>Tamanho da Amostra (n): são o número de casos utilizados no teste estatístico;</p></li>
+<li><p>Tamanho do Efeito: a magnitude da diferença, ou a magnitude da relação investigada. Em outras palavras o grau de impacto de uma variável sobre a outra;</p></li>
+<li><p>Nivel de Significância <strong>(α)</strong>: a probabilidade de cometer o Erro Tipo I, comumente o valor crítico do p-valor;</p></li>
+<li><p>Variabilidade dos Dados: é a dispersão dos dados em torno de uma medida, geralmente é utilizada como desvio padrão;</p></li>
+</ul>
+<section id="o-tamanho-amostral-n" class="level4">
+<h4 class="anchored" data-anchor-id="o-tamanho-amostral-n">2.1 O Tamanho Amostral (n)</h4>
+<p>O tamanho amostral é um dos fatores mais importantes no Poder Estatístico, já que por definição proporciona uma estimativa mais precisa da média populacional e reduz o erro padrão das estimativas.</p>
+<p>Quando estamos desenhando um estudo devemos fazer uma análise para identificarmos se a nossa amostra tem um tamanho adequado para atingir o poder estatístico necessário para identificarmos aquele efeito.</p>
+<p>Por exemplo, se quisermos identificar qual o Efeito dos Gastos de Campanha sobre a Obtenção Votos, primeiro temos que identificar qual o número mínimo de casos que a nossa amostra deve ter para que possamos identificar o efeito dos Gastos de Campanha sobre a Obtenção de Votos.</p>
+</section>
+<section id="tamanho-do-efeito" class="level4">
+<h4 class="anchored" data-anchor-id="tamanho-do-efeito">2.2 Tamanho do Efeito</h4>
+<p>Já o tamanho do Efeito afeta o poder estatístico já que efeitos maiores são mais fáceis de serem identificados que efeitos menores, mesmo que seja usada um mesmo n amostral.</p>
+<p>No exemplo abaixo vamos construir 2 modelos com o mesmo tamanho amostral, e a mesma variabilidade dos dados (Média 50, Desvio Padrão = 100), mas vamos indicar um tamanho de efeito 10x maior no primeiro modelo,</p>
+<p><code>mau  set.seed(43)  #Tamanho Amostral n &lt;- 30  #Variável Independente x &lt;- rnorm(n)  #Variável dependente modelo 1 y1 &lt;- 10 * x + rnorm(n, mean = 50, sd = 100)  #Variável dependente modelo 1 y2 &lt;- 1 * x + rnorm(n,                     mean = 50, sd = 100)  modelo1 &lt;- lm(y1 ~ x) modelo2 &lt;- lm(y2 ~ x)  sjPlot::tab_model(modelo1, modelo2)}</code></p>
+<p>No modelo a cima podemos enxergar como um efeito com magnitude 10 é detectado com um tamanho amostral de 30, enquanto um efeito de magnitude 1 não é detectado. Considerando que o efeito do modelo 2 é real, ele não seria detectado pelo poder estatístico do teste. Nesse caso cometeríamos o Erro do Tipo II onde o efeito existe mas não é detectado.</p>
+</section>
+<section id="nível-de-significância" class="level4">
+<h4 class="anchored" data-anchor-id="nível-de-significância">2.3 Nível de Significância</h4>
+<p>O nível de significância é um limiar usado para determinar quando rejeitar a hipótese nula em um teste estatístico, em outras palavras é a probabilidade de cometermos o Erro do Tipo I.</p>
+<p>Sendo um dos componentes do poder estatístico que menos temos controle, já que é convencionado pela área. Em estudos de Ciência Política, Ciências Sociais, Sociologia e Economia é convencionado o uso de significância de 5%, ou seja um p valor de 0.05, que define o corte para decidir se um valor é ou não estatisticamente significante.</p>
+<p>Variar o nível de significância para baixo reduz a chance do Erro do Tipo I, todavia reduz o poder estatístico do teste, aumentando portanto o Erro do Tipo II, salvo se o tamanho amostral ou o tamanho do efeito sejam ajustados.</p>
+</section>
+<section id="variabilidade-dos-dados" class="level4">
+<h4 class="anchored" data-anchor-id="variabilidade-dos-dados">2.4 Variabilidade dos Dados</h4>
+<p>Já a variabilidade faz referência a dispersão dos valores em torno de uma medida, geralmente é o valor do desvio padrão em torno da média. O tamanho da variabilidade pode afetar a detecção de um efeito verdadeiro, já que em tamanhos amostrais menores valores influentes podem mover muito um valor médio.</p>
+<p>É sempre bom ter em mente que maior variabilidade implica em maior incerteza na sua estimativa, que acaba reduzindo seu Poder Estatístico. No exemplo abaixo aumentamos o Desvio Padrão, veja como apesar da média e o tamanho amostral continuarem constantes o nosso efeito deixa de ser detectado.</p>
+<p><code>mau  set.seed(43)  #Tamanho Amostral n &lt;- 30  #Variável Independente x &lt;- rnorm(n)  #Variável dependente modelo 1 y1 &lt;- 10 * x + rnorm(n, mean = 50, sd = 500)  #Variável dependente modelo 1 y2 &lt;- 1 * x + rnorm(n,                     mean = 50, sd = 500)   modelo1 &lt;- lm(y1 ~ x) modelo2 &lt;- lm(y2 ~ x)  sjPlot::tab_model(modelo1, modelo2)}</code></p>
+</section>
+</section>
+<section id="cálculo-do-poder-estatístico" class="level3">
+<h3 class="anchored" data-anchor-id="cálculo-do-poder-estatístico"><strong>3. Cálculo do Poder Estatístico</strong></h3>
+<p>Digamos que precisamos avaliar o impacto do programa Bolsa Família nas taxas de aprovação em alunos do ensino fundamental.</p>
+<p>Um estudo bem desenhado tem o cálculo do Poder Estatístico como etapa inicial, já que ele nos permitirá trabalhar com uma amostra que nos permita produzir resultados estatísticos robustos.</p>
+<p>Os parametros para o cálculo são:</p>
+<ol type="1">
+<li><p>Tamanho do Efeito: É geralmente estimado com base em estudos anteriores, para o nosso caso hipotético vamos sugerir que a participação no Bolsa Família aumenta as taxas de aprovação escolar em 10% comparado com alunos que não participam do programa.</p></li>
+<li><p>Variabilidade dos Dados: No nosso caso seria o Desvio Padrão na Taxa de Aprovação Escolar, vamos sugerir um desvio padrão de .20</p></li>
+<li><p>Nível de Significância (α): Geralmente nas ciências sociais utilizamos o p valor de 0.05, indicando 5% de probabilidade de rejeitar erroneamente a hipótese nula se ela for verdadeira.</p></li>
+<li><p><strong>Poder Desejado (1 - β)</strong>: Vamos sugerir um poder de 80% ou 0.80, significando que há 80% de chance de detectar um efeito verdadeiro se ele realmente existir.</p></li>
+</ol>
+<p>No nosso exemplo vamos comparar dois grupos: alunos que recebem o Bolsa Família versus alunos que não recebem. Vamos assumir que a aprovação no grupo de tratamento seja de .75 e a do grupo de controle seja .65, para calcularmos o tamanho da amostra</p>
+<p><code>mau # proporção de aprovação para o grupo Bolsa Família grupo_tratamento &lt;- 0.75  # proporção de aprovação para o grupo controle grupo_controle &lt;- 0.65   # calculo do tamanho do efeito  tamanho_efeito &lt;- pwr::ES.h(grupo_tratamento, grupo_controle)    # Calcula o tamanho da amostra necessário pwr::pwr.p.test(h = tamanho_efeito, sig.level = 0.05, power = 0.80, alternative = "two.sided")}</code></p>
+<p>Nesse caso o Tamanho Amostral para Detectarmos o Efeito Caso ele exista é de 163</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

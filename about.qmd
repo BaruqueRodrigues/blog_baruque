@@ -1,0 +1,20 @@
+---
+title: "Quem sou eu"
+image: profile.jpg
+about:
+  template: jolla
+  links:
+    - icon: twitter
+      text: Twitter
+      href: https://x.com/baruqrodrigues
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/baruque-rodrigues-080672134/
+    - icon: github
+      text: Github
+      href: https://github.com/BaruqueRodrigues
+---
+
+Eu sou Baruque, não vou me credenciar por que eu acho isso *cringe*, todavia sou cientista social e cientista político (aposentado) de formação. Trabalho com Ciência de Dados e R desde 2019, passei tanto pelo setor público como também pela iniciativa privada, hoje tô na [Quaest](http://www.quaest.com.br).
+
+Aqui eu vou falar um pouco sobre estatística e ciência de dados. A principio esse blog surge como uma forma de estrururar alguns posts que eu fazia no twitter, mas a ideia aqui é dar um pouco mais corpo a eles, e ajudar a servir a comunidade.

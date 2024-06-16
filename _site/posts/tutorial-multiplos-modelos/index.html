@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Baruque Rodrigues">
+<meta name="dcterms.date" content="2024-06-16">
+
+<title>blog_baruque - Rodando Multiplos Modelos - Tutorial</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">blog_baruque</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">Quem sou eu</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Rodando Multiplos Modelos - Tutorial</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">tutorial</div>
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">model</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Baruque Rodrigues </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 16, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
+<section id="rodando-multiplos-modelos" class="level3">
+<h3 class="anchored" data-anchor-id="rodando-multiplos-modelos">Rodando Multiplos Modelos</h3>
+<p>Um processo muito comum na prática de análise de dados é encontrar um modelo que melhor resolva o seu problema, onde temos uma relação que queremos entender, por exemplo o número de funcionários de um Posto de Saúde da Família afeta a mortalidade de uma faixa etária dos municípios. O processo as vezes acaba sendo a construção de multiplos modelos, e a verificação um a um dos coeficientes. Meu objetivo aqui é apresentar uma forma de fazer com que esse processo repetitivo e manual possa ser acelerado, de maneira que o tempo do analista possa ser concentrado no que realmente importa, na compreensão do modelo.</p>
+<section id="dry---dont-repeat-yourself" class="level4">
+<h4 class="anchored" data-anchor-id="dry---dont-repeat-yourself">DRY - Don’t Repeat Yourself</h4>
+<p>Para aqueles que já foram meus alunos, ou trabalharam comigo sabem que esse é o um acronimo que eu sempre repito, afinal o O conceito DRY (Don’t Repeat Yourself) é um princípio fundamental na programação, pois enfatiza a redução da redundância.</p>
+<p>Em essência, DRY sugere que qualquer pedaço de código deve ter uma única e clara chamada. Em vez de duplicar código, o princípio DRY incentiva a reutilização de componentes existentes, melhorando a manutenção e a legibilidade do código.</p>
+<p>Trocando em míudos, tente programar fazendo com que cada chunk de código não seja repetida.</p>
+</section>
+<section id="pré-requisitos" class="level4">
+<h4 class="anchored" data-anchor-id="pré-requisitos">Pré requisitos</h4>
+<p>Esse tutorial vai assumir que você já entenda os conceitos de pivoteamento e de pipeamento de funções, caso você não domine esses conteúdos, recomendo que você visite o r4ds.</p>
+</section>
+<section id="botando-as-mãos-na-massa" class="level4">
+<h4 class="anchored" data-anchor-id="botando-as-mãos-na-massa">Botando as mãos na massa</h4>
+<p>Vamos utilizar dados de painel do DATASUS, armazenados em um arquivo RDS. Nosso objetivo é:</p>
+<p>Calcular um modelo de regressão para cada uma das taxas de mortalidade, onde cada taxa será a nossa variável dependente (VD).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dados_painel <span class="ot">&lt;-</span> rio<span class="sc">::</span><span class="fu">import</span>(<span class="st">"dados/dados_painel.rds"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(dados_painel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 81,525
+Columns: 22
+$ municipio              &lt;chr&gt; "110001 Alta Floresta D'Oeste", "110001 Alta Fl…
+$ ano                    &lt;chr&gt; "1998", "1999", "2000", "2001", "2002", "2003",…
+$ pessoas_psf            &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 5, 5140, 7531, 15105, 17608, …
+$ pop_menor_1            &lt;dbl&gt; 557, 543, 515, 522, 529, 535, 541, 556, 563, 55…
+$ pop_1a4                &lt;dbl&gt; 2664, 2601, 2353, 2387, 2415, 2444, 2473, 2540,…
+$ pop_15a59              &lt;dbl&gt; 14627, 14281, 15820, 16049, 16240, 16435, 16629…
+$ pop_maior_60           &lt;dbl&gt; 1157, 1130, 1486, 1508, 1526, 1544, 1561, 1603,…
+$ pop_mun_todos          &lt;dbl&gt; 25630, 25023, 26533, 26916, 27237, 27563, 27886…
+$ mort_menor_1           &lt;dbl&gt; 17, 36, 10, 12, 12, 7, 5, 12, 8, 4, 8, 4, 10, 6…
+$ mort_1a4               &lt;dbl&gt; 1, 3, 2, 0, 3, 3, 1, 1, 2, 0, 3, 2, 2, 1, 0, 0,…
+$ mort_15a59             &lt;dbl&gt; 33, 64, 30, 45, 46, 44, 26, 37, 33, 24, 50, 44,…
+$ mort_maior_60          &lt;dbl&gt; 37, 53, 50, 52, 45, 60, 51, 53, 75, 34, 75, 59,…
+$ mort_todos             &lt;dbl&gt; 90, 167, 97, 111, 107, 116, 84, 105, 119, 64, 1…
+$ tx_mort_menor_1        &lt;dbl&gt; 30.520646, 66.298343, 19.417476, 22.988506, 22.…
+$ tx_mort_menor_1a4      &lt;dbl&gt; 0.3753754, 1.1534025, 0.8499788, 0.0000000, 1.2…
+$ tx_mort_menor_15a59    &lt;dbl&gt; 225.6102, 448.1479, 189.6334, 280.3913, 283.251…
+$ tx_mort_menor_maior_60 &lt;dbl&gt; 3197.926, 4690.265, 3364.738, 3448.276, 2948.88…
+$ tx_mort_todos          &lt;dbl&gt; 351.1510, 667.3860, 365.5825, 412.3941, 392.848…
+$ tx_cobertura_psf       &lt;dbl&gt; 0.00000000, 0.00000000, 0.00000000, 0.00000000,…
+$ cod_uf                 &lt;chr&gt; "11", "11", "11", "11", "11", "11", "11", "11",…
+$ existe_psf             &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,…
+$ sigla_uf               &lt;chr&gt; "RO", "RO", "RO", "RO", "RO", "RO", "RO", "RO",…</code></pre>
+</div>
+</div>
+<p>Observe aqui que temos variáveis que indicam taxas de mortalidade para diferentes grupos etários, já que a taxa de mortalidade é nossa variável dependente uma das soluções seria executar um modelo para cada uma delas.</p>
+<p>O problema dessa abordagem é que o número de modelos escalaria muito rápido. Se temos 5 taxas de mortalidade serão 5 modelos, se adicionamos 1 variável de controle a cada uma delas, seriam 10 modelos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plm<span class="sc">::</span><span class="fu">plm</span>(tx_mort_menor_1 <span class="sc">~</span> pessoas_psf,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">data =</span> dados_painel,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">model =</span> <span class="st">"within"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"ano"</span>, <span class="st">"municipio"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Oneway (individual) effect Within Model
+
+Call:
+plm::plm(formula = tx_mort_menor_1 ~ pessoas_psf, data = dados_painel, 
+    model = "within", index = c("ano", "municipio"))
+
+Unbalanced Panel: n = 15, T = 5372-5427, N = 81218
+
+Residuals:
+    Min.  1st Qu.   Median  3rd Qu.     Max. 
+-17.1364 -11.0568  -1.2128   6.6585 242.8223 
+
+Coefficients:
+              Estimate Std. Error t-value Pr(&gt;|t|)
+pessoas_psf 6.6285e-08 4.6189e-08  1.4351   0.1513
+
+Total Sum of Squares:    13746000
+Residual Sum of Squares: 13746000
+R-Squared:      2.5361e-05
+Adj. R-Squared: -0.00015936
+F-statistic: 2.05942 on 1 and 81202 DF, p-value: 0.15127</code></pre>
+</div>
+</div>
+<p>Já uma outra solução é utilizando tópicos de programação funcional. Primeiro nós iremos mudar o formato dos dados, de maneira que existam 5 variáveis, <code>pessoas_psf</code>, que é nossa Variável Independente, <code>nomes_mortalidade</code> que contém os nomes das nossas variáveis dependentes e <code>values_mortalidade</code> que contém os valores dessas variáveis, e as variáveis <code>municipio</code>, e <code>ano</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dados_painel <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">"tx_mor"</span>), pessoas_psf, municipio, ano) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Organizando os dados em formato longo, empilhando as variáveis de mortalidade</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(tx_mort_menor_1<span class="sc">:</span>tx_mort_todos),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"nomes_mortalidade"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"values_mortalidade"</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 407,625 × 5
+   pessoas_psf municipio              ano   nomes_mortalidade values_mortalidade
+         &lt;dbl&gt; &lt;chr&gt;                  &lt;chr&gt; &lt;chr&gt;                          &lt;dbl&gt;
+ 1           0 110001 Alta Floresta … 1998  tx_mort_menor_1               30.5  
+ 2           0 110001 Alta Floresta … 1998  tx_mort_menor_1a4              0.375
+ 3           0 110001 Alta Floresta … 1998  tx_mort_menor_15…            226.   
+ 4           0 110001 Alta Floresta … 1998  tx_mort_menor_ma…           3198.   
+ 5           0 110001 Alta Floresta … 1998  tx_mort_todos                351.   
+ 6           0 110001 Alta Floresta … 1999  tx_mort_menor_1               66.3  
+ 7           0 110001 Alta Floresta … 1999  tx_mort_menor_1a4              1.15 
+ 8           0 110001 Alta Floresta … 1999  tx_mort_menor_15…            448.   
+ 9           0 110001 Alta Floresta … 1999  tx_mort_menor_ma…           4690.   
+10           0 110001 Alta Floresta … 1999  tx_mort_todos                667.   
+# ℹ 407,615 more rows</code></pre>
+</div>
+</div>
+<p>Agora nós iremos transformar nossos dados em nested_data. Onde iremos criar um subconjunto de dados para cada uma das taxas de mortalidade. Observe que a coluna data contém um dataset com 2 colunas e 81 mil linhas, nesse dataset está contida a variável <code>pessoas_psf</code> e a variável <code>values_mortalidade</code> que contém o o número das taxas de mortalidade por faixa</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dados_painel <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Organizando os dados em formato longo, empilhando as variáveis de mortalidade</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(tx_mort_menor_1<span class="sc">:</span>tx_mort_todos),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"nomes_mortalidade"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"values_mortalidade"</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>nomes_mortalidade) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  nomes_mortalidade      data                  
+  &lt;chr&gt;                  &lt;list&gt;                
+1 tx_mort_menor_1        &lt;tibble [81,525 × 18]&gt;
+2 tx_mort_menor_1a4      &lt;tibble [81,525 × 18]&gt;
+3 tx_mort_menor_15a59    &lt;tibble [81,525 × 18]&gt;
+4 tx_mort_menor_maior_60 &lt;tibble [81,525 × 18]&gt;
+5 tx_mort_todos          &lt;tibble [81,525 × 18]&gt;</code></pre>
+</div>
+</div>
+<p>Agora podemos executar o nosso modelo, para tal iremos criar uma coluna no dataset chamada <code>modelo_plm</code>, que conterá um modelo para cada uma das nossas variáveis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dados_painel <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">"tx_mor"</span>), pessoas_psf, ano, municipio) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Organizando os dados em formato longo, empilhando as variáveis de mortalidade</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(tx_mort_menor_1<span class="sc">:</span>tx_mort_todos),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"nomes_mortalidade"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"values_mortalidade"</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>nomes_mortalidade) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Executando o modelo para cada variável</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">modelo_plm =</span> <span class="fu">map</span>(data, <span class="sc">~</span>plm<span class="sc">::</span><span class="fu">plm</span>(values_mortalidade <span class="sc">~</span> pessoas_psf,</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">data =</span> .,</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">model =</span> <span class="st">"within"</span>,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"ano"</span>, <span class="st">"municipio"</span>))),</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Transformando o modelo em um formato tabular</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">modelo_plm =</span> <span class="fu">map</span>(modelo_plm, broom<span class="sc">::</span>tidy)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  nomes_mortalidade      data                  modelo_plm      
+  &lt;chr&gt;                  &lt;list&gt;                &lt;list&gt;          
+1 tx_mort_menor_1        &lt;tibble [81,525 × 4]&gt; &lt;tibble [1 × 5]&gt;
+2 tx_mort_menor_1a4      &lt;tibble [81,525 × 4]&gt; &lt;tibble [1 × 5]&gt;
+3 tx_mort_menor_15a59    &lt;tibble [81,525 × 4]&gt; &lt;tibble [1 × 5]&gt;
+4 tx_mort_menor_maior_60 &lt;tibble [81,525 × 4]&gt; &lt;tibble [1 × 5]&gt;
+5 tx_mort_todos          &lt;tibble [81,525 × 4]&gt; &lt;tibble [1 × 5]&gt;</code></pre>
+</div>
+</div>
+<p>Agora só precisamos remover a coluna data, que não tem nenhum valor analítico, e desenlistar a variável <code>modelo_plm</code> para checarmos os modelo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dados_painel <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">"tx_mor"</span>), pessoas_psf, ano, municipio) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Organizando os dados em formato longo, empilhando as variáveis de mortalidade</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(tx_mort_menor_1<span class="sc">:</span>tx_mort_todos),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"nomes_mortalidade"</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"values_mortalidade"</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>nomes_mortalidade) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Executando o modelo para cada variável</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">modelo_plm =</span> <span class="fu">map</span>(data, <span class="sc">~</span>plm<span class="sc">::</span><span class="fu">plm</span>(values_mortalidade <span class="sc">~</span> pessoas_psf,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">data =</span> .,</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">model =</span> <span class="st">"within"</span>,</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">index =</span> <span class="fu">c</span>(<span class="st">"ano"</span>, <span class="st">"municipio"</span>))),</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Transformando o modelo em um formato tabular</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">modelo_plm =</span> <span class="fu">map</span>(modelo_plm, broom<span class="sc">::</span>tidy)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>data) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_wider</span>(modelo_plm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 6
+  nomes_mortalidade      term             estimate   std.error statistic p.value
+  &lt;chr&gt;                  &lt;chr&gt;               &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 tx_mort_menor_1        pessoas_psf 0.0000000663      4.62e-8      1.44 0.151  
+2 tx_mort_menor_1a4      pessoas_psf 0.00000000414     3.18e-9      1.30 0.193  
+3 tx_mort_menor_15a59    pessoas_psf 0.00000113        4.71e-7      2.40 0.0163 
+4 tx_mort_menor_maior_60 pessoas_psf 0.0000141         5.11e-6      2.75 0.00591
+5 tx_mort_todos          pessoas_psf 0.00000133        8.63e-7      1.54 0.124  </code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
